@@ -45,16 +45,11 @@ class TicTacToe:
             self.game_over()
         return self.moves
 
-    def new_game(self):
-        self.board = blank_board
-
     def has_won(self, player):
         for row in self.board:
             # 3 across
             if row.count(player) == 3:
                 return True
-            else:
-                return False
         # 3 vertical (left)
         if self.board[0][0] == player and self.board[1][0] == player and self.board[2][0] == player:
             return True
@@ -90,20 +85,20 @@ class TicTacToe:
             print('It\'s a tie!')
         again = input('Would you like to play again? (y/n)\n')
         if again == 'y':
+            self.game_is_on = True
+            self.board = [['-' for _ in range(3)] for _ in range(3)]
+            self.moves = []
             self.play()
 
     def play(self):
-        self.game_is_on = True
-        self.new_game()
-        self.moves = []
         while self.game_is_on:
             self.print_board()
             print(self.get_moves())
             print(f'{self.player.upper()}\'s turn.')
-            choice = int(input('Where would you like to move?\n'))
+            choice = input('Where would you like to move?\n')
             try:
-                self.make_move(choice, self.player)
-            except InvalidMove:
+                self.make_move(int(choice), self.player)
+            except (InvalidMove, ValueError):
                 print('Invalid move. Try again.')
                 pass
             else:
